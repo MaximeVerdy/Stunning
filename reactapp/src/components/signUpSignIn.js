@@ -1,223 +1,215 @@
 import React, {useState, } from 'react'
-import {Layout, Row, Col, Form, Input, Button, Typography, Space, Card, } from 'antd';
+import {Redirect} from 'react-router-dom'
+import {Layout, Row, Col, Form, Input, Button, Typography} from 'antd';
 
 import 'antd/dist/antd.css';
 import '../css/style.css';
 
-import Background from '../images/runner_background3.jpg';
 import Logo from '../images/Stunning-logo.png';
 
 
 function Sign() {
 
+const [signUpEmail, setSignUpEmail] = useState('')
+const [signUpPassword, setSignUpPassword] = useState('')
+
+const [signInEmail, setSignInEmail] = useState('')
+const [signInPassword, setSignInPassword] = useState('')
+
+const [userExists, setUserExists] = useState(false)
+
+const [listErrorsSignin, setErrorsSignin] = useState([])
+const [listErrorsSignup, setErrorsSignup] = useState([])
+
+
+var handleSubmitSignup = async () => {
+    
+  const data = await fetch('/sign-up', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    body: `emailFromFront=${signUpEmail}&passwordFromFront=${signUpPassword}`
+  })
+
+  const body = await data.json()
+
+  if(body.result === true){
+    setUserExists(true)
+  } else {
+    setErrorsSignup(body.error)
+  }
+}
+
+var handleSubmitSignin = async () => {
+
+  const data = await fetch('/sign-in', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    body: `emailFromFront=${signInEmail}&passwordFromFront=${signInPassword}`
+  })
+
+  const body = await data.json()
+
+  if(body.result === true){
+    setUserExists(true)
+  }  else {
+    setErrorsSignin(body.error)
+  }
+}
+
+if(userExists){
+  return <Redirect to='/accueil' />
+}
+
+// mise en forme des titres antd
 const { Title } = Typography;
 
-// mise en forme des formulaires  
-  const layout = {
-    labelCol: {
-      align:"middle"
-    },
-    wrapperCol: {
-      align:"middle"
-    },
-  };
-  const tailLayout = {
-    wrapperCol: {
-      align:"middle"
-    },
-  };
-  
-    const onFinish = (values) => {
-      console.log('Success:', values);
-    };
-  
-    const onFinishFailed = (errorInfo) => {
-      console.log('Failed:', errorInfo);
-    };
-  
+// messages de non conformité pour les formulaires antd
+const validateMessages = {
+  required: 'Saisissez votre ${label}',
+  types: {
+    email: 'Format avec @ et extension nécessaire',
+  },
+  string: {
+    min: 'Minimum ${min} caractères',
+  },
+  number: {
+    min: 'Minimum ${min} caractères',
+  },
+};
+
+// messages d'erreurs rencontrées en back-end lors de l'identification
+var tabErrorsSignin = listErrorsSignin.map((error,i) => {
+  return( <p className= "erreurs">
+            {error}
+          </p>
+        )
+})
+
+// messages d'erreurs rencontrées en back-end lors de l'enregistrement
+var tabErrorsSignup = listErrorsSignup.map((error,i) => {
+  return( <p className= "erreurs">
+            {error}
+          </p>
+        )
+})
+
 
   return (
 
-    <Layout
-      style={{  
-        backgroundImage: `url(${Background})`,
-        backgroundPosition: 'right',
-        backgroundSize: 'cover',
-        backgroundRepeat: 'repeat-y',
-        height: '100vh',
-      }}
-    >
+    <Layout className= "loginLayout">
 
-          <div
-              style={{  
-                
-              }}
-          >
 
-              <Row
-                justify="center"
-                align="middle"
-                style = {{
-                  marginTop: '3%'
-                }}
-              >
-                  <Col
-                      flex="700px"
-                      style = {{
-                        display:'flex',
-                        justifyContent:'center',
-                        alignItems: 'center',
-                      }}
-                  >
-                    <img src={Logo} alt="Fusion de Stats et de Running" 
-                      width="100%" 
-                    />
-                </Col>
-              </Row>
-
-              <Row
-                justify="center"
-                align="middle"
-              >
-                  <Col
-                      flex="700px"
-                      style = {{
-                        display:'flex',
-                        justifyContent:'center',
-                        alignItems: 'center',
-                        marginBottom: '20px',
-                        textAlign: 'center',
-                      }}
-                  >
-                    <h4
-                    >Vous cherchez un site pour compiler vos statiques de running ? Il y a Stunning
-                    </h4>
+              <Row className="loginRow">
+                  <Col className="loginColImg">
+                      <img 
+                          src={Logo} 
+                          alt="Fusion de Stats et de Running" 
+                          width="100%" 
+                      />
                   </Col>
-                  
               </Row>
 
-              <Row
-                justify="center"
-                align="middle"
-              >
-                  <Col
-                      flex="350px"
-                      style = {{
-                        display:'flex',
-                        justifyContent:'center',
-                        alignItems: 'center',
-                        height: '350px',
-                        backgroundColor: 'rgba(255, 255, 255, .9)',
-                      }}
-                  >
+              <Row className="loginRow">
+                  <Col className="loginColSlog">
+                    <h4>Vous cherchez un site pour enregistrer et analyser vos statistiques de running ? Stunning est là pour ça !</h4>
+                  </Col>
+              </Row>
 
-                        <Form
-                          {...layout}
+              <Row className="loginRow">
+                  <Col className="loginColForm">
+
+                        <Form 
+                          validateMessages= {validateMessages}
                           name="basic"
                           initialValues={{ remember: true }}
                         >
 
-                          <Title level={3}
-                            style = {{
-                              display:'flex',
-                              justifyContent:'center',
-                              marginTop:'20px',
-                              marginBottom:'35px',
-                            }}
-                          >
+                          <Title level={3} className="title">
                             Reconnexion
                           </Title>
 
                           <Form.Item
-                            label="Email"
-                            name="username"
-                            rules={[{ required: true, message: 'Saisissez votre Email' }]}
+                            label="email"
+                            name="email"
+                            rules={[{ required: true }]}
                           >
-                            <Input size="large"/>
+                            <Input 
+                              size="large"
+                              onChange={(e) => setSignInEmail(e.target.value)}
+                            />
                           </Form.Item>
 
                           <Form.Item
-                            label="Password"
+                            label="mot de passe"
                             name="password"
-                            rules={[{ required: true, message: 'Saisissez votre mot de passe' }]}
+                            rules={[{ required: true },
+                                    {min: 6},
+                            ]}
                           >
-                            <Input.Password size="large"/>
+                            <Input.Password 
+                              size="large"
+                              onChange={(e) => setSignInPassword(e.target.value)}
+                            />
                           </Form.Item>
                         
-                          <Form.Item {...tailLayout}>
-                            <Button type="primary" htmlType="submit" block
-                                style = {{
-                                  display:'flex',
-                                  justifyContent:'center',
-                                  alignItems:'center',
-                                  height:'40px',
-                                  marginTop:'20px',
-                                }}
+                          <Form.Item>
+                            <Button type="primary" htmlType="submit" block className="button"
+                              onClick={() => handleSubmitSignin()}
                             >
                               Connexion
                             </Button>
+
+                            {tabErrorsSignin}
+
                           </Form.Item>
                         </Form>
-
+                        
                   </Col>
 
-                  <Col
-                      flex="350px"
-                      style = {{
-                        display:'flex',
-                        justifyContent:'center',
-                        alignItems: 'center',
-                        height: '350px',
-                        backgroundColor: 'rgba(255, 255, 255, .9)',
-                        margin: "1px"
-                      }}
-                  >
+                  <Col className="loginColForm">
 
                         <Form
-                          {...layout}
+                          validateMessages={validateMessages}
                           name="basic"
                           initialValues={{ remember: true }}
                         >
 
-                          <Title level={3}
-                            style = {{
-                              display:'flex',
-                              justifyContent:'center',
-                              marginTop:'20px',
-                              marginBottom:'35px',
-                            }}
-                          >
+                          <Title level={3}className="title">                          
                             Inscription
                           </Title>
 
                           <Form.Item
-                            label="Email"
-                            name="username"
-                            rules={[{ required: true, message: 'Saisissez votre Email' }]}
+                            label="email"
+                            name="email"
+                            rules={[{ type: 'email', required: true }]}
                           >
-                            <Input size="large"/>
+                            <Input 
+                              size="large"
+                              onChange={(e) => setSignUpEmail(e.target.value)}
+                            />
                           </Form.Item>
 
                           <Form.Item
-                            label="Password"
+                            label="mot de passe"
                             name="password"
-                            rules={[{ required: true, message: 'Saisissez votre mot de passe' }]}
+                            rules={[{ type: 'string', required: true }, {min: 6},
+                            ]}
                           >
-                            <Input.Password size="large"/>
+                            <Input.Password 
+                              size="large"
+                              onChange={(e) => setSignUpPassword(e.target.value)}
+                            />
                           </Form.Item>
                         
-                          <Form.Item {...tailLayout}>
-                            <Button type="primary" htmlType="submit" block
-                                style = {{
-                                  display:'flex',
-                                  justifyContent:'center',
-                                  alignItems:'center',
-                                  height:'40px',
-                                  marginTop:'20px',
-                                }}
+                          <Form.Item>
+                            <Button type="primary" htmlType="submit" block className="button"
+                              onClick={() => handleSubmitSignup()}
                             >
                               Connexion
                             </Button>
+
+                            {tabErrorsSignup}
+
                           </Form.Item>
                         </Form>
 
@@ -225,7 +217,6 @@ const { Title } = Typography;
 
               </Row>
 
-              </div>
     </Layout>
 
   );

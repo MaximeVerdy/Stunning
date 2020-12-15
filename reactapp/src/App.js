@@ -2,6 +2,8 @@ import React from 'react';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
 
 import Sign from './components/signUpSignIn.js';
+import Accueil from './components/accueil.js';
+
 
 
 function App() {
@@ -13,6 +15,7 @@ function App() {
       <Router>
         <Switch>
           <Route component={Sign} path="/" exact />
+          <Route component={Accueil} path="/accueil" exact />
 
 
         </Switch>

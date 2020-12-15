@@ -7,6 +7,9 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
+// utilisation de mongoose et sa connexion
+var mongoose = require('./models/connection')
+
 var app = express();
 
 // view engine setup
