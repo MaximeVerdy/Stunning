@@ -67,13 +67,11 @@ const { Title } = Typography;
 const validateMessages = {
   required: 'Saisissez votre ${label}',
   types: {
-    email: 'Format avec @ et extension nécessaire',
+    email: 'Arobase et extension nécessaires',
   },
   string: {
-    min: 'Minimum ${min} caractères',
-  },
-  number: {
-    min: 'Minimum ${min} caractères',
+    // min: '8 caractères avec min, maj, chiffre et caractère spécial',
+    min: '8 caractères minimum',
   },
 };
 
@@ -103,7 +101,7 @@ var tabErrorsSignup = listErrorsSignup.map((error,i) => {
                   <Col className="loginColImg">
                       <img 
                           src={Logo} 
-                          alt="Fusion de Stats et de Running" 
+                          alt="Stats et Running fusionnés" 
                           width="100%" 
                       />
                   </Col>
@@ -129,7 +127,7 @@ var tabErrorsSignup = listErrorsSignup.map((error,i) => {
                           </Title>
 
                           <Form.Item
-                            label="email"
+                            label="Email"
                             name="email"
                             rules={[{ required: true }]}
                           >
@@ -140,10 +138,10 @@ var tabErrorsSignup = listErrorsSignup.map((error,i) => {
                           </Form.Item>
 
                           <Form.Item
-                            label="mot de passe"
+                            label="Mot de passe"
                             name="password"
                             rules={[{ required: true },
-                                    {min: 6},
+                                    {min: 8},
                             ]}
                           >
                             <Input.Password 
@@ -179,7 +177,7 @@ var tabErrorsSignup = listErrorsSignup.map((error,i) => {
                           </Title>
 
                           <Form.Item
-                            label="email"
+                            label="Email"
                             name="email"
                             rules={[{ type: 'email', required: true }]}
                           >
@@ -190,7 +188,7 @@ var tabErrorsSignup = listErrorsSignup.map((error,i) => {
                           </Form.Item>
 
                           <Form.Item
-                            label="mot de passe"
+                            label="Mot de passe"
                             name="password"
                             rules={[{ type: 'string', required: true }, {min: 6},
                             ]}
