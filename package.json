@@ -8,11 +8,14 @@
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
+    "crypto-js": "^4.0.0",
     "debug": "~2.6.9",
     "ejs": "~2.6.1",
+    "email-validator": "^2.0.4",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "mongoose": "^5.11.8",
-    "morgan": "~1.9.1"
+    "morgan": "~1.9.1",
+    "uid2": "0.0.3"
   }
 }
