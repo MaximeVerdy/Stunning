@@ -1,40 +1,38 @@
-
-
-.loginLayout {
+.activityLayout {
     display: flex;
-    background-image: url('../images/runner_background.jpg');
-    background-position: left;
-    background-size: cover;
+    background-color: white;
     min-height:100vh;
 }
 
-.loginRow {
+.activityRow {
     justify-content: center;
     text-align: right;
     margin-top: 35px;
 }
 
-.loginColImg {
-    display: flex;
-    width: 700px;
-    justify-content:center;
-    align-items: center;
+.historyRow {
+    justify-content: center;
+    text-align: left;
+    margin-top: 35px;
 }
 
-.loginColSlog {
-    display: flex;
-    width: 700px;
-    justify-content:center;
-    align-items: center;
-}
-
-.loginColForm {
-    display: flex;
+.ColForm {
+    display: block;
     width: 350px;
-    height: 350px;
     justify-content:center;
     align-items: center;
-    background-color: rgba(255, 255, 255, .8);
+    background-color: rgb(242, 242, 242);
+    padding: 10px;
+    margin: 1px;
+}
+
+.ColStats {
+    display: block;
+    width: 700px;
+    justify-content:center;
+    align-items: center;
+    background-color: rgb(242, 242, 242);
+    padding: 10px;
     margin: 1px;
 }
 
@@ -59,8 +57,8 @@
     width:100%;
 }
 
-@media (max-width: 700px) {
-    .loginRow {
+@media (max-width: 702px) {
+    /* .loginRow {
         margin-top: 15px
     }
     .loginColImg {
@@ -68,11 +66,11 @@
     }
     .loginColSlog {
         width: 350px
-    }
+    } */
 }
 
 @media (max-width: 574px) {
-    .loginColForm {
+    /* .loginColForm {
         height: 380px
-    }
+    } */
 }

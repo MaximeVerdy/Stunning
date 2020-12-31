@@ -1,15 +1,23 @@
-import React, {useState, } from 'react'
+// librairies
+import React, {useState} from 'react'
 import {Redirect} from 'react-router-dom'
 import {Layout, Row, Col, Form, Input, Button, Typography} from 'antd';
+import {connect} from 'react-redux'
 
+// style
 import 'antd/dist/antd.css';
-import '../css/style.css';
+import '../css/login.css';
 
+// images
 import Logo from '../images/Stunning-logo.png';
 
+// composants
+import Footer from './footer.js'
 
-function Sign() {
 
+function Sign(props) {
+
+// liste des états utilisés dans le composant Sign
 const [signUpEmail, setSignUpEmail] = useState('')
 const [signUpPassword, setSignUpPassword] = useState('')
 
@@ -22,6 +30,8 @@ const [listErrorsSignin, setErrorsSignin] = useState([])
 const [listErrorsSignup, setErrorsSignup] = useState([])
 
 
+
+// échange de données avec le back pour l'inscription
 var handleSubmitSignup = async () => {
     
   const data = await fetch('/sign-up', {
@@ -33,12 +43,15 @@ var handleSubmitSignup = async () => {
   const body = await data.json()
 
   if(body.result === true){
+    props.addToken(body.token)
     setUserExists(true)
   } else {
     setErrorsSignup(body.error)
   }
 }
 
+
+// échange de données avec le back pour la reconnexion
 var handleSubmitSignin = async () => {
 
   const data = await fetch('/sign-in', {
@@ -50,6 +63,7 @@ var handleSubmitSignin = async () => {
   const body = await data.json()
 
   if(body.result === true){
+    props.addToken(body.token)
     setUserExists(true)
   }  else {
     setErrorsSignin(body.error)
@@ -57,7 +71,7 @@ var handleSubmitSignin = async () => {
 }
 
 if(userExists){
-  return <Redirect to='/accueil' />
+  return <Redirect to='/statistiques' />
 }
 
 // mise en forme des titres antd
@@ -71,7 +85,7 @@ const validateMessages = {
   },
   string: {
     // min: '8 caractères avec min, maj, chiffre et caractère spécial',
-    min: '8 caractères minimum',
+    min: '8 caractères de 4 types minimum',
   },
 };
 
@@ -90,6 +104,7 @@ var tabErrorsSignup = listErrorsSignup.map((error,i) => {
           </p>
         )
 })
+
 
 
   return (
@@ -141,7 +156,6 @@ var tabErrorsSignup = listErrorsSignup.map((error,i) => {
                             label="Mot de passe"
                             name="password"
                             rules={[{ required: true },
-                                    {min: 8},
                             ]}
                           >
                             <Input.Password 
@@ -190,7 +204,8 @@ var tabErrorsSignup = listErrorsSignup.map((error,i) => {
                           <Form.Item
                             label="Mot de passe"
                             name="password"
-                            rules={[{ type: 'string', required: true }, {min: 6},
+                            rules={[{ type: 'string', required: true }, 
+                                    {min: 8},
                             ]}
                           >
                             <Input.Password 
@@ -215,9 +230,22 @@ var tabErrorsSignup = listErrorsSignup.map((error,i) => {
 
               </Row>
 
+          <Footer/>
+          
     </Layout>
 
   );
 }
 
-export default Sign;
+function mapDispatchToProps(dispatch){
+  return {
+    addToken: function(token){
+      dispatch({type: 'addToken', token: token})
+    }
+  }
+}
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(Sign)
