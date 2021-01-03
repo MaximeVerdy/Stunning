@@ -77,7 +77,7 @@ var handleSubmitSignin = async () => {
 }
 
 // si l'utilisateur existe en BDD, le rediriger vers la page de statistiques
-if(userExists){
+if((userExists && listErrorsSignup.length == 0) || (userExists && listErrorsSignin.length == 0)){
   return <Redirect to='/statistiques' />
 }
 
@@ -105,7 +105,7 @@ var tabErrorsSignin = listErrorsSignin.map((error,i) => {
 
 // messages d'erreurs rencontrées en back-end lors de l'enregistrement
 var tabErrorsSignup = listErrorsSignup.map((error,i) => {
-  return( <p className= "erreurs">
+  return( <p key={i} className= "erreurs">
             {error}
           </p>
         )

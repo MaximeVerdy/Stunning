@@ -71,7 +71,7 @@ function History(props) {
 
     // condition de rediction en cas d'absence de token 
     if(token == ''){
-        return <Redirect to='/' />
+        return <Redirect to='/notlogged' />
         }   
   
     return (
@@ -130,7 +130,14 @@ function History(props) {
                                 }}
                             >
                                 <Tag color="#0AAF9C">{activity.distance} km</Tag>
+
+                                { activity.chronoH > 0 &&
                                 <Tag color="#3867DD">{activity.chronoH }h {activity.chronoM} m {activity.chronoS} s</Tag>
+                                }
+                                { activity.chronoH == 0 &&
+                                <Tag color="#3867DD">{activity.chronoM} m {activity.chronoS} s</Tag>
+                                }
+
                                 <Tag color="#F26A65">{activity.type}</Tag>
 
 

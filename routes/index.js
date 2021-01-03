@@ -44,9 +44,18 @@ router.post('/sign-up', async function(req,res,next){
     error.push ('Remplissez le formulaire pour vous inscrire')
   }
 
+  function validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  }
+  if (validateEmail(req.body.emailFromFront) == false) {
+    error.push('Email dans un mauvais format')
+  }
+
+
   // vérification de la complexité suffisante du mot de passe
-  var regex = RegExp ("(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])")
-  if(regex.test(req.body.passwordFromFront) == false && emptyInput == false && existingAccount == false
+  var regex = RegExp ("(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$")
+  if(regex.test(req.body.passwordFromFront) == false && emptyInput == false && existingAccount == false && error.length == 0
   ){
        error.push('Mot de passe avec minuscule, majuscule, chiffre et caractère spécial requis')
   }
@@ -70,7 +79,7 @@ router.post('/sign-up', async function(req,res,next){
   }
 
   // message d'erreur d'enregistrement
-  if (result == false  && existingAccount == false){
+  if (result == false  && existingAccount == false && error.length == 0){
     error.push ('Une erreur est advenue. Enregistrement impossible')
   }
   

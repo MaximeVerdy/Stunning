@@ -18,22 +18,23 @@ import History from './components/history.js';
 //style
 import './css/mainwrapper.css';
 
-
-import Nivo from './components/nivo.js';
-
-
+// création du store qui contiendra les états voulus dans les reducers
 const store = createStore(combineReducers({token}))
 
-store.subscribe(() => console.log('Changement des états dans Redux ----->', store.getState()))
+// contrôle des états dans Redux. Permet juste leur affichage dans la console
+// store.subscribe(() => console.log('CONSOLE LOG REDUX ----->', store.getState()))
 
 function App() {
 
+  // nommage de l'application
   document.title = 'Stunning'; 
 
   return (
 
+    // Le Redux store est rendu disponibre dans l'ensemble des composants qui sont wrappés ci dessous
     <Provider store={store}>
 
+      {/* React Router permet la navigation entre les composants */}
       <Router>
         <div className="main-wrapper">
           <Switch>
@@ -44,10 +45,6 @@ function App() {
             <Route component={NotLogged} path="/notlogged" exact />
             <Route component={Activity} path="/activite" exact />
             <Route component={History} path="/historique" exact />
-
-            <Route component={Nivo} path="/nivo" exact />
-
-
 
           </Switch>
         </div>
