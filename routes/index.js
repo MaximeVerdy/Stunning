@@ -247,6 +247,7 @@ router.get('/stats', async function(req,res,next){
   var yearChosen = 0
   var dataFormat = ''
   var joursParAn = 0
+  var noDocument = true
 
   // vérification que ce token existe 
   var user = await userModel.findOne({token : req.query.token})
@@ -257,6 +258,12 @@ router.get('/stats', async function(req,res,next){
      monthChosen = parseInt(await req.query.monthChosen)
      dataFormat = await req.query.dataFormat
      timeGap = await req.query.timeGap
+  }
+
+  if (activities.length != 0) {
+    noDocument = false
+  } else {
+    noDocument = true
   }
 
 
@@ -980,7 +987,7 @@ router.get('/stats', async function(req,res,next){
       error.push ('Veuillez vous connecter')
     }
 
-  res.json({stats, error})
+  res.json({stats, error, noDocument})
 
 })
 
