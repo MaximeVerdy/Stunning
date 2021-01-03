@@ -1,24 +1,37 @@
+/* le syle de la page d'ajout d'activité, d'historique et de statistiques */
+
 .activityLayout {
     display: flex;
     background-color: white;
     min-height:100vh;
+    background-image: url('../images/runner_background.jpg');
+    background-position: left;
+    background-size: cover;
+    background-position-y: top;
 }
 
 .activityRow {
     justify-content: center;
     text-align: right;
-    margin-top: 35px;
+    margin-top: 60px;
 }
 
 .historyRow {
     justify-content: center;
     text-align: left;
-    margin-top: 35px;
+    margin-top: 60px;
+}
+
+.RowParam {
+    display: flex;
+    justify-content:center;
+    margin-top: 1px;
+
 }
 
 .ColForm {
     display: block;
-    width: 350px;
+    width: 420px;
     justify-content:center;
     align-items: center;
     background-color: rgb(242, 242, 242);
@@ -26,15 +39,60 @@
     margin: 1px;
 }
 
+.mapContainer {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    background-color: white;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 10px;
+    padding-left: 10px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
+.trashBt {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    background-color: white;
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
 .ColStats {
-    display: block;
-    width: 700px;
+    display: flex;
+    width: 800px;
+    height: 500px;
     justify-content:center;
     align-items: center;
     background-color: rgb(242, 242, 242);
     padding: 10px;
     margin: 1px;
 }
+
+.ColWrapperParam {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content:center;
+    background-color: rgb(242, 242, 242);
+    width: 800px;
+    align-items: center;
+}
+
+.ColParam {
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    background-color: rgb(28, 190, 174);
+    padding: 5px;
+    margin: 5px;
+    border-radius: 2px;
+    height: 40px;
+}
+
 
 .title {
     justify-content: center;
@@ -57,20 +115,15 @@
     width:100%;
 }
 
-@media (max-width: 702px) {
-    /* .loginRow {
-        margin-top: 15px
-    }
-    .loginColImg {
-        width: 350px
-    }
-    .loginColSlog {
-        width: 350px
-    } */
-}
+  /* sur les écrans étroit le style est redéfini*/
+@media (max-width: 802px) {
 
-@media (max-width: 574px) {
-    /* .loginColForm {
-        height: 380px
-    } */
+    .ColStats {
+        width: 500px;
+        height: 400px;
+    }
+
+    .ColWrapperParam {
+        width: 500px;
+    }
 }

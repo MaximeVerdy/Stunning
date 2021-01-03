@@ -10,9 +10,7 @@ import '../css/navbar.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChartBar } from '@fortawesome/free-solid-svg-icons'
 import { faPowerOff } from '@fortawesome/free-solid-svg-icons'
-import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons'
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
-import { faMedal } from '@fortawesome/free-solid-svg-icons'
 import { faHistory } from '@fortawesome/free-solid-svg-icons'
 
 // images
@@ -41,16 +39,8 @@ export default function Topnavbar() {
           <span className="hiddenTextMenu" style={{color:'white' }}> Stunning </span>
       </div>
       
-      <Menu style={{textAlign: 'center'}} mode="horizontal" theme="dark"  /* defaultSelectedKeys="stats" */ > 
+      <Menu style={{textAlign: 'center'}} mode="horizontal" theme="dark" > 
 
-        <Menu.Item key="stats">
-          <Link to="/statistiques">
-            <div style={{color:'white' }}>
-                <FontAwesomeIcon icon={faChartBar} size="lg"/>
-                <span className="hiddenTextMenu"> STATISTIQUES </span>
-            </div>
-          </Link>
-        </Menu.Item>
 
         <Menu.Item key="add">
           <Link to="/activite">
@@ -70,26 +60,14 @@ export default function Topnavbar() {
           </Link>
         </Menu.Item>
 
-        <Menu.Item key="goal">
-          <Link to="/statistiques">
-            <div style={{color:'white', }}>
-              <FontAwesomeIcon icon={faMedal} size="lg" />
-              <span className="hiddenTextMenu"> OBJECTIF</span>
-            </div>
-          </Link>
-        </Menu.Item>
-
-
-              <Menu.Item key="calendar">
+        <Menu.Item key="stats">
           <Link to="/statistiques">
             <div style={{color:'white' }}>
-              <FontAwesomeIcon icon={faCalendarAlt} size="lg" />
-              <span className="hiddenTextMenu"> CALENDRIER</span>
+                <FontAwesomeIcon icon={faChartBar} size="lg"/>
+                <span className="hiddenTextMenu"> STATISTIQUES </span>
             </div>
           </Link>
         </Menu.Item>
-
-
 
       </Menu>
 

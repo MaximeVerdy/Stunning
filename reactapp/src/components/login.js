@@ -31,20 +31,23 @@ const [listErrorsSignup, setErrorsSignup] = useState([])
 
 
 
-// échange de données avec le back pour l'inscription
+// échange de données avec le back pour l'inscription par fonction asynchrone. le await indique qu'il faut attendre le retour des données pour terminer la fonction
 var handleSubmitSignup = async () => {
     
   const data = await fetch('/sign-up', {
-    method: 'POST',
+    method: 'POST', // pour écrire des données en BDD
     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
     body: `emailFromFront=${signUpEmail}&passwordFromFront=${signUpPassword}`
   })
 
+  // convertion des données reçues en objet JS (parsage)
   const body = await data.json()
 
+  // si l'échange avec la BDD a fonctionné, envoie du token dans le Redux Store
   if(body.result === true){
     props.addToken(body.token)
     setUserExists(true)
+  // sinon récupérer le tableau d'erreurs venu du back
   } else {
     setErrorsSignup(body.error)
   }
@@ -55,21 +58,25 @@ var handleSubmitSignup = async () => {
 var handleSubmitSignin = async () => {
 
   const data = await fetch('/sign-in', {
-    method: 'POST',
+    method: 'POST', // recommandé pour échanger des informations sensibles avec le backend
     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
     body: `emailFromFront=${signInEmail}&passwordFromFront=${signInPassword}`
   })
 
+  // convertion des données reçues en objet JS (parsage)
   const body = await data.json()
 
+    // si l'échange avec la BDD a fonctionné, envoie du token dans le Redux Store
   if(body.result === true){
     props.addToken(body.token)
     setUserExists(true)
   }  else {
+      // sinon récupérer le tableau d'erreurs venu du back
     setErrorsSignin(body.error)
   }
 }
 
+// si l'utilisateur existe en BDD, le rediriger vers la page de statistiques
 if(userExists){
   return <Redirect to='/statistiques' />
 }
@@ -84,7 +91,6 @@ const validateMessages = {
     email: 'Arobase et extension nécessaires',
   },
   string: {
-    // min: '8 caractères avec min, maj, chiffre et caractère spécial',
     min: '8 caractères de 4 types minimum',
   },
 };
@@ -108,8 +114,9 @@ var tabErrorsSignup = listErrorsSignup.map((error,i) => {
 
 
   return (
+    // le style de la page de login est dans css/login.css
 
-    <Layout className= "loginLayout">
+    <Layout className= "loginLayout"> 
 
 
               <Row className="loginRow">
@@ -148,6 +155,7 @@ var tabErrorsSignup = listErrorsSignup.map((error,i) => {
                           >
                             <Input 
                               size="large"
+                              // les charactères saisis sont mis dans l'état correspondant
                               onChange={(e) => setSignInEmail(e.target.value)}
                             />
                           </Form.Item>
@@ -160,17 +168,20 @@ var tabErrorsSignup = listErrorsSignup.map((error,i) => {
                           >
                             <Input.Password 
                               size="large"
+                              // les charactères saisis sont mis dans l'état correspondant
                               onChange={(e) => setSignInPassword(e.target.value)}
                             />
                           </Form.Item>
                         
                           <Form.Item>
                             <Button type="primary" htmlType="submit" block className="button"
+                              // au clic sur le bouton, handleSubmitSignin est déclanché et les données sont envoyés en back
                               onClick={() => handleSubmitSignin()}
                             >
                               Connexion
                             </Button>
 
+                            {/* s'il y a des messages d'erreurs, il s'afficheront ici */}
                             {tabErrorsSignin}
 
                           </Form.Item>
@@ -237,6 +248,7 @@ var tabErrorsSignup = listErrorsSignup.map((error,i) => {
   );
 }
 
+// fonction d'envoyer de données dans le Redux Store
 function mapDispatchToProps(dispatch){
   return {
     addToken: function(token){

@@ -1,7 +1,7 @@
 import React, {useState, useEffect } from 'react'
 import {Redirect, useHistory} from 'react-router-dom'
 import {connect} from 'react-redux'
-import {Layout, Row, Typography, Tag, } from 'antd';
+import {Layout, Row, Typography, Tag} from 'antd';
 
 //composants
 import Topnavbar from './navbar.js'
@@ -11,9 +11,6 @@ import Footer from './footer.js'
 import 'antd/dist/antd.css';
 import '../css/other.css';
 
-// images
-// import imageBG from '../images/runner_background.jpg';
-
 // icônes
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
@@ -22,53 +19,42 @@ function History(props) {
 
 // Etats
 
+    // état du token, récupéré du Redux Store
     const [token, setToken] = useState(props.token)
-    // const [activityID, setToken] = useState(props.activityID)
-
     const [activitiesList, setActivitiesList] = useState([])
-
     const [deleted, setDeleted] = useState(0)
-
     const [listErrorsSaving, setErrorsSaving] = useState([])
 
-    // const [bgColourTrash, setBgColourTrash] = useState("grey")
 
-// condition de rediction en cas d'absence de token 
-    // if(token == ''){
-    //     return <Redirect to='/' />
-    //     }   
+// échange de données avec le back pour la récuration des données à chaque changement de l'état deleted
+    useEffect(() => {
+        const findActivities = async () => {
+        const data = await fetch(`/history?token=${token}`) // pour récupérer des données 
+        const body = await data.json() // convertion des données reçues en objet JS (parsage)
 
-    
-// échange de données avec le back pour l'inscription
-
-        useEffect(() => {
-            const findActivities = async () => {
-            const data = await fetch(`/history?token=${token}`)
-            const body = await data.json()
-
-            setActivitiesList(body.sortedActivities)
-            // props.saveActivities(body.activities)
-            }
-
-            findActivities()
-        },[deleted])
-
-        var deleteActivity = async (activityID) => {
-            // props.deleteToWishList(title)
-
-            const deleting = await fetch('/history', {
-            method: 'DELETE',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: `activityID=${activityID}&token=${props.token}`
-            })
-
-            setDeleted(deleted + 1)
+        setActivitiesList(body.sortedActivities)
+        setErrorsSaving(body.error)
         }
 
-        var noActivity
-        if(activitiesList == 0){
-            noActivity = <h4 style={{display:'flex', margin:"30px", marginBottom:"50px", justifyContent:'center', color: 'red'}}>Aucune activité enregistrée</h4>
-        }
+        findActivities()
+    },[deleted])
+
+    // fonction de suppression d'une activité en base de données
+    var deleteActivity = async (activityID) => {
+        const deleting = await fetch('/history', {
+        method: 'DELETE', // méthode pour supprimer en BDD
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: `activityID=${activityID}&token=${props.token}`
+        })
+
+        setDeleted(deleted + 1)
+    }
+
+    // message en cas d'absence de données enregistrée pour l'instant
+    var noActivity
+    if(activitiesList == 0 && listErrorsSaving.length == 0){
+        noActivity = <h4 style={{display:'flex', margin:"30px", marginBottom:"50px", justifyContent:'center', color: 'red'}}>Aucune activité enregistrée</h4>
+    }
 
         
     // mise en forme des titres antd
@@ -76,79 +62,50 @@ function History(props) {
 
     // messages d'erreurs rencontrées en back-end lors de l'enregistrement
     var tabErrorsSaving = listErrorsSaving.map((error,i) => {
-    return( <p className= "erreurs">
-              {error}
-            </p>
+    return( <h4 style={{display:'flex', margin:"30px", marginBottom:"50px", justifyContent:'center', color: 'red'}}
+            > 
+            {error}
+            </h4>
           )
-  })
+    })
 
-  
+    // condition de rediction en cas d'absence de token 
+    if(token == ''){
+        return <Redirect to='/' />
+        }   
   
     return (
+    // le style de la page history est dans css/other.css
   
         <Layout className= "activityLayout">
 
             <Topnavbar/>
-
-                   HISTORIQUE
-                    <p>{token}</p>
                     
                 <Row className="historyRow">
-                  <div className="ColForm" 
-                //    overflow= 'scroll'
-                //    style = {{
-                //        height: '500px'
-                //    }}
-                  >
+                  <div className="ColForm" >
 
                     <Title level={3} className="title">
                     Historique d'activités
                     </Title>
 
+                    {/* messages d'erreur */}
                     {tabErrorsSaving}
 
+                    {/* messages d'absenced de données en BDD */}
                     {noActivity}
 
-                        
+                    {/* map du tableau de données */}   
                     {activitiesList.map((activity,i) => (
                     <div key={i} style={{display:'flex',justifyContent:'center'}}>
 
 
-                    <div
-                        
-                        style={{ 
-                        display:'flex',
-                        flexDirection: 'column',
-                        width: '300px', 
-                        backgroundColor: 'white',
-                        paddingTop: '5px',
-                        paddingBottom: '5px',
-                        paddingRight: '10px',
-                        paddingLeft: '10px',
-                        marginTop:'1px', 
-                        marginBottom:'1px', 
-
-                        // justifyContent:'space-between',
-                        // backgroundImage: "url("+imageBG+")",
-                        // backgroundSize: '100%',
-                        // backgroundColor: 'white',
-                        // backgroundPositionY: 'bottom',
-                        // opacity:'0.4',
-                        
-                        }}
-                        
-                        actions={[
-                            // <Icon type="read" key="ellipsis2" onClick={() => showModal(article.title,article.content)} />,
-                            // <Icon type="delete" key="ellipsis" onClick={() => deleteActivity(activity.activityID)} />
-                            // 
-
-                        ]}
-                        >
+                    <div className="mapContainer">
                             <div
                                 style={{ 
                                 paddingBottom: '5px',
                                 }}
                             >
+                                {/* formatage d'affichage de la date */}  
                                 <span>Course du {activity.date.slice(8, 10)}</span>
                                 {  activity.date.slice(5, 7) == 1 && <span> janvier </span> 
                                 || activity.date.slice(5, 7) == 2 && <span> février </span>
@@ -170,33 +127,21 @@ function History(props) {
                                 style={{ 
                                     display:'flex',
                                     flexDirection: 'row',
-                                    // justifyContent:'space-between',
-                                    }}
+                                }}
                             >
-                                <Tag color="#87d068">{activity.distance} km</Tag>
-                                <Tag color="#2db7f5">{activity.chronoH }h {activity.chronoM} m {activity.chronoS} s</Tag>
-                                <Tag color="#f50">{activity.type}</Tag>
+                                <Tag color="#0AAF9C">{activity.distance} km</Tag>
+                                <Tag color="#3867DD">{activity.chronoH }h {activity.chronoM} m {activity.chronoS} s</Tag>
+                                <Tag color="#F26A65">{activity.type}</Tag>
 
 
                             </div>
 
                     </div>
 
-                    <div
-                        style={{ 
-                            display:'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            padding: '10px',
-                            backgroundColor: 'white',
-                            marginTop:'1px', 
-                            marginBottom:'1px', 
-                            }}
-                    >
-                        <FontAwesomeIcon icon={faTrash} size="lg" color="grey"
+                    <div className="trashBt">
+                        <FontAwesomeIcon icon={faTrash} size="lg" color= "grey"
+                                // au clic, suppression de l'activité en BDD
                                 onClick={() => deleteActivity(activity.activityID)}
-                                // onMouseEnter={() => setBgColourTrash("black")}
-                                // onMouseLeave={() => setBgColourTrash("grey")}
                             />
                     </div>
 
@@ -217,6 +162,7 @@ function History(props) {
     );
   }
   
+// fonction de récupération de données dans le Redux Store 
 function mapStateToProps(state){
 return {token: state.token}
 }

@@ -1,3 +1,4 @@
+/* fixation de la barre de navigation en haut */
 .sticky {
     position: -webkit-sticky;
     position: sticky;
@@ -6,7 +7,8 @@
      ;
   }
 
-@media (max-width: 830px) {
+  /* sur un écran étroit le texte disparait pour ne laisser que les icônes */
+@media (max-width: 720px) {
     .hiddenTextMenu {
         display: none;
     }

@@ -1,5 +1,5 @@
 import React, {useState, useEffect } from 'react'
-import {Redirect, useHistory} from 'react-router-dom'
+import {Redirect} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {Layout, 
         Row, 
@@ -26,7 +26,6 @@ import '../css/other.css';
 
 function Activity(props) {
 
-    // const history = useHistory()
 
     // date du jour mise au format antd pour le date picker
     var today = new Date();
@@ -36,8 +35,9 @@ function Activity(props) {
     today = yyyy + '-' + mm  + '-' + dd;
 
 
-// Etats
+    // Etats
 
+    // état du token, récupéré du Redux Store
     const [token, setToken] = useState(props.token)
     
     const [date, setDate] = useState(today)
@@ -74,23 +74,20 @@ function Activity(props) {
 
     const [form] = Form.useForm();
 
-// condition de rediction en cas d'absence de token 
-    // if(token == ''){
-    //     return <Redirect to='/' />
-    //     }   
 
     
-// échange de données avec le back pour l'inscription
+// échange de données avec le back pour l'écriture en BDD
 var handleSubmitSaving = async () => {
     
     const data = await fetch('/save-activity', {
-      method: 'POST',
+      method: 'POST', // pour écrire des données en BDD
       headers: {'Content-Type': 'application/x-www-form-urlencoded'},
       body: `tokenFromFront=${token}&distanceFromFront=${distance}&chronoHFromFront=${chronoH}&chronoMFromFront=${chronoM}&chronoSFromFront=${chronoS}&dateFromFront=${date}&typeFromFront=${type}`
     })
   
+    // convertion des données reçues en objet JS (parsage)
     const body = await data.json()
-  
+    // si l'échange avec la BDD n'a fonctionné, récupérer le tableau d'erreurs venu du back
     if(body.result === true){
       setSaved(true)
     } else {
@@ -99,11 +96,14 @@ var handleSubmitSaving = async () => {
 
 }
 
+    // si l'écriture en BDD s'est bien passée 
     useEffect(() => {
+        // pop-up indiquant que l'écriture en BDD 
         if (saved == true) {
             Modal.success({
                 content: 'Activité correctement enregistrée',
             });
+        //réinitialisation des états
             setSaved(false)
             setDate(today)
             setDistance(0)
@@ -123,10 +123,6 @@ var handleSubmitSaving = async () => {
         required: 'Saisissez votre ${label}',
     };
 
-    // const config = {
-    //     rules: [{ type: 'number', required: true, message: 'TEST' }],
-    //   };
-
     // messages d'erreurs rencontrées en back-end lors de l'enregistrement
     var tabErrorsSaving = listErrorsSaving.map((error,i) => {
     return( <p className= "erreurs">
@@ -139,16 +135,20 @@ var handleSubmitSaving = async () => {
   const onSubmit = (values) => {
     form.resetFields();
   }
+
+  // condition de rediction en cas d'absence de token 
+  if(token == ''){
+    return <Redirect to='/' />
+    }   
   
   
     return (
-  
+    // le style de la page newactivity est dans css/other.css
+
         <Layout className= "activityLayout">
 
             <Topnavbar/>
 
-                   NOUVELLE ACTIVITE
-                    <p>{token}</p>
                     
                 <Row className="activityRow">
                   <Col className="ColForm" >
@@ -157,7 +157,6 @@ var handleSubmitSaving = async () => {
                         form={form}
                           validateMessages= {validateMessages}
                           name="basic"
-                        //   initialValues={{ remember: true }}
                           onFinish={onSubmit}
                           span= {5}
                         >
@@ -169,10 +168,11 @@ var handleSubmitSaving = async () => {
                             <Form.Item 
                             label="Date"
                             name="date"
-                            // rules={[{ required: true }]}
                             >
                                 <DatePicker 
+                                    // aujourd'hui en valeur par défaut
                                     defaultValue={moment(today, 'YYYY-MM-DD')}
+                                    // changement de l'état Date si une date est sélectionnée
                                     onChange={onChangeDate}
                                 />
                             </Form.Item>
@@ -181,8 +181,6 @@ var handleSubmitSaving = async () => {
                             <Form.Item 
                             label="Distance"
                             name="distance"
-                            // rules={[{ type: 'number', required: true }]}
-                            // {...config}
                             >
                                 <InputNumber 
                                     min={0} 
@@ -193,9 +191,9 @@ var handleSubmitSaving = async () => {
 
                             <Form.Item label="Chrono"
                                 name="duree"
-                            // rules={[{ type: 'number', required: true }]}
                             >
                                 <InputNumber 
+                                    // pattern pour contraindre l'utilisateur à utiliser le format nombre
                                     style={{ width: 60 }} min={0} pattern={"^[0-9]+$"}
                                     onChange={onChangeChronoH}
                                 /> 
@@ -231,7 +229,6 @@ var handleSubmitSaving = async () => {
                           <Form.Item>
                             <Button type="primary" htmlType="submit" block className="button"
                               onClick={() => handleSubmitSaving()}
-                            //   onClick={onCheck}
                             >
                               Enregistrer
                             </Button>
@@ -254,7 +251,8 @@ var handleSubmitSaving = async () => {
   
     );
   }
-  
+
+// fonction de récupération de données dans le Redux Store
 function mapStateToProps(state){
 return {token: state.token}
 }
