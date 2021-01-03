@@ -1,9 +1,13 @@
+/* le syle de la page de login */
+
 .loginLayout {
     display: flex;
+    background-color: white;
+    min-height:100vh;
     background-image: url('../images/runner_background.jpg');
     background-position: left;
     background-size: cover;
-    min-height:100vh;
+    background-position-y: top;
 }
 
 .loginRow {
@@ -58,6 +62,8 @@
     text-align: center;
     width:100%;
 }
+
+  /* sur les écrans étroit le style est redéfini*/
 
 @media (max-width: 702px) {
     .loginRow {
