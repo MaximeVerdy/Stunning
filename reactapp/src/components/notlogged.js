@@ -1,3 +1,6 @@
+// page affichée en cas d'absence de token trouvé
+
+
 import React, {useEffect, useState} from 'react'
 import {Redirect} from 'react-router-dom'
 import {Layout, Row, Col} from 'antd';

@@ -22,7 +22,7 @@ function History(props) {
     const [dataStats, setDataStats] = useState([])
     const [listErrorsSaving, setErrorsSaving] = useState([])
 
-    const [groupMode, setGroupMode] = useState('stacked')
+    const [groupMode, setGroupMode] = useState('grouped')
     function onChangeAlignement(value) {
         setGroupMode(value);
     }
@@ -37,15 +37,16 @@ function History(props) {
     const [timeGap, setTimeGap] = useState('mensuel')
     function onChangeTimeGap (value) {
         setTimeGap(value);
-
     }
 
-    const [yearChosen, setYearChosen] = useState(120)
+    var yearNow = new Date().getFullYear() - 1900
+    const [yearChosen, setYearChosen] = useState(yearNow)
     function onChangeYear(value) {
         setYearChosen(value);
     }
 
-    const [monthChosen, setMonthChosen] = useState(12)
+    var monthNow = new Date().getMonth()
+    const [monthChosen, setMonthChosen] = useState(monthNow)
     function onChangeMonth(value) {
         setMonthChosen(value);
     }
@@ -61,6 +62,7 @@ function History(props) {
         setDataStats(body.stats)
 
         setErrorsSaving(body.error)
+
         }
 
         findActivities()
@@ -222,7 +224,7 @@ function History(props) {
   
     // condition de rediction en cas d'absence de token 
         if(token == ''){
-            return <Redirect to='/' />
+            return <Redirect to='/notlogged' />
             }   
 
     return (
@@ -368,7 +370,7 @@ function History(props) {
                             >   
                             <Form.Item >
                                     <Select 
-                                        defaultValue ={"2020"}
+                                        defaultValue ={"2021"}
                                         placeholder="année"
                                         onChange={onChangeYear}
                                     >
