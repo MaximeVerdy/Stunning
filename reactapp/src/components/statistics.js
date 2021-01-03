@@ -52,6 +52,8 @@ function History(props) {
     }
 
     const [legende, setLegende] = useState('kilomètres')
+
+    const [noDocument, setNoDocument] = useState(true)
     
     // échange de données avec le back pour récupérer les données par fonction asynchrone. le await indique qu'il faut attendre le retour des données pour terminer la fonction
     useEffect(() => {
@@ -60,8 +62,10 @@ function History(props) {
         const body = await data.json() // convertion des données reçues en objet JS (parsage)
 
         setDataStats(body.stats)
-
         setErrorsSaving(body.error)
+        setNoDocument(body.noDocument)
+
+        console.log('CONSOLE ----------------->', dataStats)
 
         }
 
@@ -98,8 +102,8 @@ function History(props) {
     },[yearChosen, monthChosen, dataFormat, timeGap])
 
     // message en cas d'absence de données enregistrée pour l'instant
-    var noActivity
-    if(dataStats == 0 && listErrorsSaving.length == 0){
+    var noActivity = ''
+    if(noDocument == true && listErrorsSaving.length == 0){
         noActivity = <h4 style={{display:'flex', margin:"30px", marginBottom:"50px", justifyContent:'center', color: 'red'}}>Aucune activité enregistrée</h4>
     }
         
@@ -244,8 +248,9 @@ function History(props) {
                     {/* messages d'absenced de données en BDD */}
                     {noActivity}
 
+
                     {/* si des données sont récupérée du back alors le graph s'affiche */}
-                    {dataStats != '' && (
+                    {noDocument == false && (
                         <Graph/>
                     )}
 

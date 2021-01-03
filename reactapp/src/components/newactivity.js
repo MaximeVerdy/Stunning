@@ -100,9 +100,9 @@ var handleSubmitSaving = async () => {
     useEffect(() => {
         // pop-up indiquant que l'écriture en BDD 
         if (saved == true) {
-            // Modal.success({
-            //     content: 'Activité correctement enregistrée',
-            // });
+            Modal.success({
+                content: 'Activité correctement enregistrée',
+            });
         //réinitialisation des états
             setSaved(false)
             setDate(today)
