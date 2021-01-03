@@ -78,7 +78,7 @@ var handleSubmitSignin = async () => {
 
 // si l'utilisateur existe en BDD, le rediriger vers la page de statistiques
 if((userExists && listErrorsSignup.length == 0) || (userExists && listErrorsSignin.length == 0)){
-  return <Redirect to='/statistiques' />
+  return <Redirect to='/activite' />
 }
 
 // mise en forme des titres antd
