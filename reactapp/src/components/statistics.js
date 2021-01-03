@@ -65,8 +65,6 @@ function History(props) {
         setErrorsSaving(body.error)
         setNoDocument(body.noDocument)
 
-        console.log('CONSOLE ----------------->', dataStats)
-
         }
 
         findActivities()
