@@ -1,5 +1,7 @@
+// appel du module mongoose
 var mongoose = require('mongoose')
 
+// création du modèle user
 const userSchema = mongoose.Schema({
     email: String,
     password: String,

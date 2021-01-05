@@ -122,7 +122,7 @@ function History(props) {
     return ( 
         <ResponsiveBar
 
-            // données récupérées du back
+            // données récupérées du back  intégré dans le graph
             data={dataStats}
 
             groupMode= {groupMode}
@@ -229,6 +229,8 @@ function History(props) {
             return <Redirect to='/notlogged' />
             }   
 
+
+            
     return (
         // le style de la page de login est dans css/other.css
   
