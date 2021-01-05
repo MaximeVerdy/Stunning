@@ -2,8 +2,7 @@
 var express = require('express');
 var router = express.Router();
 
-// module & modèles mongoose
-var mongoose = require('../models/connection');
+// modèles mongoose
 var userModel = require('../models/users')
 var activityModel = require('../models/activities')
 
@@ -44,6 +43,7 @@ router.post('/sign-up', async function(req,res,next){
     error.push ('Remplissez le formulaire pour vous inscrire')
   }
 
+  // vérification du format du mot de passe
   function validateEmail(email) {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
@@ -199,10 +199,14 @@ router.get('/history', async function(req,res,next){
     }
 
   // données envoyées en front
-  res.json({sortedActivities, error})
+  res.json({sortedActivities : sortedActivities, error : error})
 
 
 })
+
+
+
+
 
 // ---------------------------------- //
 // route de suppression d'activité    //
@@ -992,25 +996,214 @@ router.get('/stats', async function(req,res,next){
 })
 
 
+
+
+
+
+
+
+// ------------------- //
+// routes de test Jest //
+// ------------------- //
+
+router.get('/historytest', async function(req,res,next){
+
+  var error = []
+  var activities = []
+  let token = req.query.token;
+  var activitiesExist = false
+
+  var user = await userModel.findOne({token: req.query.token})
+  if(user != null){
+     activities = await activityModel.find({token: token})
+  }
+
+  if(activities.length > 0){
+    activitiesExist = true
+    }
+
+  if (user == null){
+    error.push ('Veuillez vous connecter')
+  }
+
+  res.json({activities : activities, error : error})
+
+})
+
+// --------------------------------------
+
+
+router.delete('/historytest', async function(req,res,next){
+
+  var result = false
+  let activityID = req.body.activityID;
+
+    var deleteInDB = await activityModel.deleteOne({activityID: activityID})
+
+    if(deleteInDB.deletedCount == 1){
+      result = true
+    }
+
+  res.json({result : result})
+})
+
+// --------------------------------------
+
+router.post('/saveactivitytest', async function(req,res,next){
+
+  var error = []
+  var result = false
+  var saveActivity = null
+  let token = req.body.tokenFromFront
+  let distance = req.body.distanceFromFront
+  let date = req.body.dateFromFront
+  let chronoH = req.body.chronoHFromFront
+  let chronoM = req.body.chronoMFromFront
+  let chronoS = req.body.chronoSFromFront
+  let type = req.body.typeFromFront
+
+    var newActivity = new activityModel({
+      token: token,
+      activityID: uid2(32),
+      distance: distance,
+      date: date,
+      chronoH: chronoH,
+      chronoM: chronoM,
+      chronoS: chronoS,
+      type: type,
+    })
+    saveActivity = await newActivity.save()
+  
+  res.json({saveActivity : saveActivity})
+})
+
+// -----------------------------------------------------------------
+
+router.post('/sign-up-test', async function(req,res,next){
+
+  var error = []
+  var emptyInput = false
+  var existingAccount = false
+  var result = false
+  var saveUser = null
+  var token = null
+
+  const data = await userModel.findOne({
+    email: req.body.emailFromFront
+  })
+
+  if(data != null){
+    existingAccount = true
+    error.push('Ce compte existe déjà')
+  }
+
+  if(req.body.emailFromFront == ''
+    || req.body.passwordFromFront == ''
+  ){
+    emptyInput = true
+    error.push ('Remplissez le formulaire pour vous inscrire')
+  }
+
+  function validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  }
+  if (validateEmail(req.body.emailFromFront) == false) {
+    error.push('Email dans un mauvais format')
+  }
+
+
+  var regex = RegExp ("(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$")
+  if(regex.test(req.body.passwordFromFront) == false && emptyInput == false && existingAccount == false && error.length == 0
+  ){
+       error.push('Mot de passe avec minuscule, majuscule, chiffre et caractère spécial requis')
+  }
+
+
+  if(error.length == 0){
+    var salt = uid2(32)
+    var newUser = new userModel({
+      email: req.body.emailFromFront,
+      password: SHA256(req.body.passwordFromFront+salt).toString(encBase64),
+      token: uid2(32),
+      salt: salt,
+    })
+    saveUser = await newUser.save()
+  
+    
+    if(saveUser){
+      result = true
+      token = saveUser.token
+    }
+  }
+
+  if (result == false  && existingAccount == false && error.length == 0){
+    error.push ('Une erreur est advenue. Enregistrement impossible')
+  }
+  
+
+  res.json({result})
+
+})
+
+// ----------------------------------------------------------------------------
+
+
+router.post('/sign-in-test', async function(req,res,next){
+
+  var result = false
+  var user = null
+  var error = []
+  var token = null
+  
+  if(req.body.emailFromFront == ''
+  || req.body.passwordFromFront == ''
+  ){
+    error.push(' ')
+  }
+
+  if(error.length == 0){
+    const user = await userModel.findOne({
+      email: req.body.emailFromFront,
+    })
+  
+    if(user){
+      const passwordEncrypt = SHA256(req.body.passwordFromFront + user.salt).toString(encBase64)
+
+      if(passwordEncrypt == user.password){
+        result = true
+        token = user.token
+      } else {
+        result = false
+        error.push('Mot de passe incorrect')
+      }
+      
+    } else {
+      error.push('Connexion impossible avec cet email')
+    }
+  }
+  
+
+  res.json({error})
+
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 module.exports = router;
 
 
 
+// THE END //
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// THE END

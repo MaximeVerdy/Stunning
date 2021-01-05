@@ -1,5 +1,7 @@
+// appel du module mongoose
 var mongoose = require('mongoose')
 
+// création du modèle activity
 const activitySchema = mongoose.Schema({
     token: String,
     activityID: String,
