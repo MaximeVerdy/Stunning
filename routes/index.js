@@ -1006,29 +1006,74 @@ router.get('/stats', async function(req,res,next){
 // routes de test Jest //
 // ------------------- //
 
+
+
+
 router.get('/historytest', async function(req,res,next){
+
+var activities = []
+activityExist = false
+
+  var activities = await activityModel.find({token: req.query.token})
+
+  if (activities.length > 0) {
+    activityExist = true
+  }
+
+  res.json({activityExist : activityExist})
+
+})
+
+router.get('/historytestb', async function(req,res,next){
+
+  let token = req.query.token;
+
+    res.json({token : token})
+  
+  })
+
+router.get('/historytest2', async function(req,res,next){
+
+  var activities = []
+
+    var activities = await activityModel.find({token: req.query.token})
+  
+    res.json({activities : activities})
+  
+  })
+
+
+  router.get('/historytest3', async function(req,res,next){
+
+    var activities = []
+  
+    var user = await userModel.findOne({token: req.query.token})
+    if(user != null){
+       activities = await activityModel.find({token: req.query.token})
+    }
+  
+    res.json({activities : activities})
+  
+  })
+  
+
+router.get('/historytest4', async function(req,res,next){
 
   var error = []
   var activities = []
-  let token = req.query.token;
-  var activitiesExist = false
 
-  var user = await userModel.findOne({token: req.query.token})
+  var user = await userModel.findOne({token: 'tokenFaux'})
   if(user != null){
-     activities = await activityModel.find({token: token})
+     activities = await activityModel.find({token: req.query.token})
   }
-
-  if(activities.length > 0){
-    activitiesExist = true
-    }
 
   if (user == null){
     error.push ('Veuillez vous connecter')
   }
 
   res.json({activities : activities, error : error})
-
 })
+
 
 // --------------------------------------
 
@@ -1187,17 +1232,6 @@ router.post('/sign-in-test', async function(req,res,next){
   res.json({error})
 
 })
-
-
-
-
-
-
-
-
-
-
-
 
 
 

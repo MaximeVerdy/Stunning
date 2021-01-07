@@ -154,12 +154,14 @@ function History(props) {
 
                 </div>
 
-              ))}
+                      ))}
 
                         
                   </div>
                 
                 </Row>
+
+                <div className="endDiv"></div>
                 
 
             <Footer/>

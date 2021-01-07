@@ -10,14 +10,7 @@ return (
   
 
 
-    <div className="footer"
-        style={{ 
-          // display: 'flex',
-          // position: 'absolute',          
-          // bottom: 0,
-          // right: 7
-        }}
-    >
+    <div className="footer">
             <Link to="/MentionsLegales">
             <p style={{ 
                 color: 'grey',
