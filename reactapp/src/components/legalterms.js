@@ -1,17 +1,43 @@
-import React from 'react'
+import React, {useState } from 'react'
+import {Link} from 'react-router-dom'
+import {connect} from 'react-redux'
+
+// icônes
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUndoAlt } from '@fortawesome/free-solid-svg-icons'
 
 //composants
 import Topnavbar from './navbar.js'
 
 
-export default function MentionsLegales () {
+function MentionsLegales (props) {
 
+      // état du token, récupéré du Redux Store
+      const [token, setToken] = useState(props.token)
   
     return (
   
         <div>
 
-            <Topnavbar/>
+            {  token != '' &&
+             <Topnavbar/>
+            }
+
+            {  token == '' &&
+                <div 
+                   style={{
+                     position: 'absolute',          
+                     top: 1,
+                     right: 0,
+                     padding: '10px',
+                   }}
+                 >
+                   <Link to="/">
+                   <FontAwesomeIcon icon={faUndoAlt} size="lg" color="grey"/>
+                     <span className="hiddenTextMenu" style={{color:'black' }}> Connexion </span>
+                   </Link>
+               </div>
+            }
 
             <div
               style=
@@ -102,3 +128,13 @@ export default function MentionsLegales () {
 
 )
 }
+
+// fonction de récupération de données dans le Redux Store
+function mapStateToProps(state){
+  return {token: state.token}
+  }
+  
+  export default connect(
+  mapStateToProps,
+  null
+  )(MentionsLegales)

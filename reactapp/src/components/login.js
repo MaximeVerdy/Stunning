@@ -32,7 +32,7 @@ const [listErrorsSignup, setErrorsSignup] = useState([])
 
 
 // échange de données avec le back pour l'inscription par fonction asynchrone. le await indique qu'il faut attendre le retour des données pour terminer la fonction
-var handleSubmitSignup = async () => {
+var  handleSubmitSignup = async () => {
     
   const data = await fetch('/sign-up', {
     method: 'POST', // pour écrire des données en BDD
@@ -240,6 +240,8 @@ var tabErrorsSignup = listErrorsSignup.map((error,i) => {
                   </Col>
 
               </Row>
+
+              <div className="endDiv"></div>
 
           <Footer/>
           

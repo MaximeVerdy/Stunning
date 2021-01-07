@@ -8,15 +8,12 @@
   }
 
 /* sur les écrans étroit le style est redéfini*/
-  @media (max-width: 850px) {
+  @media (max-width: 960px) {
     .footer {
-        position: relative;
-        position: -webkit-sticky;
-        position: sticky;
-        bottom: -3rem;
-        align-self: center;
-        margin-top: 100px;
-
-
+        display:flex;
+        position: absolute;          
+        bottom: 0%;
+        left: 50%;
+        transform: translate(-52px);
     }
 }
