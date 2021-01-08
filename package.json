@@ -11,8 +11,11 @@
     "@shelf/jest-mongodb": "^1.2.3",
     "cookie-parser": "~1.4.4",
     "crypto-js": "^4.0.0",
+    "cypress": "^6.2.1",
     "debug": "~2.6.9",
     "ejs": "~2.6.1",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.5",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "mongoose": "^5.11.8",
@@ -20,6 +23,7 @@
     "uid2": "0.0.3"
   },
   "devDependencies": {
+    "@babel/plugin-syntax-jsx": "^7.12.1",
     "supertest": "^6.0.1"
   }
 }
