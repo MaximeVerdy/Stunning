@@ -9,7 +9,7 @@ var options = {
 }
 
 // connexion avec identifiants
-mongoose.connect('mongodb+srv://admin:mongoPWverdy80@cluster0.oimhm.mongodb.net/stunning?retryWrites=true&w=majority',
+mongoose.connect('mongodb+srv://admin:motdepassefaux@cluster0.oimhm.mongodb.net/stunning?retryWrites=true&w=majority',
     options,
     function(err){
         console.log(err);
