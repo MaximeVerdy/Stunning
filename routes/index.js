@@ -52,7 +52,6 @@ router.post('/sign-up', async function(req,res,next){
     error.push('Email dans un mauvais format')
   }
 
-
   // vérification de la complexité suffisante du mot de passe
   var regex = RegExp ("(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$")
   if(regex.test(req.body.passwordFromFront) == false && emptyInput == false && existingAccount == false && error.length == 0

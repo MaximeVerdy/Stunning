@@ -26,8 +26,6 @@ const store = createStore(combineReducers({token}))
 
 function App() {
 
-  // nommage de l'application
-  document.title = 'Stunning'; 
 
   return (
 

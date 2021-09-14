@@ -10,6 +10,34 @@ var usersRouter = require('./routes/users');
 // utilisation de mongoose et sa connexion
 var mongoose = require('./models/connection')
 
+
+
+
+// // Exécution de Babel
+
+//     require('babel-core/register')({
+//       presets: ["react", "es2015"]
+//     })
+//     var React = require('react');
+//     var ReactDOMServer = require('react-dom/server');
+//     var MyComponent = React.createFactory(require('./reactapp/src/App'));  // dans le cours: require('./MyComponent')
+//     var ComponentHTML = ReactDOMServer.renderToString(MyComponent());
+
+//     // var express = require('express');
+//     // var app = express();
+//     // app.set('view engine', 'ejs');
+
+//     app.get('/', function (req, res) {
+//     res.render('index', {resultat: ComponentHTML});
+//     });
+
+//     app.listen(80, function () {
+//     console.log("Server listening on port 80");
+//     });
+
+
+
+
 var app = express();
 
 // view engine setup

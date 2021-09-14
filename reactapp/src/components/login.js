@@ -31,6 +31,7 @@ const [listErrorsSignup, setErrorsSignup] = useState([])
 
 
 
+
 // échange de données avec le back pour l'inscription par fonction asynchrone. le await indique qu'il faut attendre le retour des données pour terminer la fonction
 var  handleSubmitSignup = async () => {
     
