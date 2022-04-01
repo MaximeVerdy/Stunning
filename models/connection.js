@@ -9,9 +9,9 @@ var options = {
 }
 
 // connexion avec identifiants
-mongoose.connect('YOUR_MONGO_KEY',
+mongoose.connect('mongodb+srv://admin:DftGDh5OiyAqQL7S@cluster0.oimhm.mongodb.net/stunning?retryWrites=true&w=majority',
     options,
-    function(err){
+    function (err) {
         console.log(err);
     }
 )
